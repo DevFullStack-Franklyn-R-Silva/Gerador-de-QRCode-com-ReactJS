@@ -1,5 +1,7 @@
 # Gerador-de-QRCode-com-ReactJS
 
+[![wakatime](https://wakatime.com/badge/user/268de5b9-4dbd-4873-9ede-a165e5745754/project/9ef7b6c4-80ab-4866-be52-b446eedd73d3.svg)](https://wakatime.com/badge/user/268de5b9-4dbd-4873-9ede-a165e5745754/project/9ef7b6c4-80ab-4866-be52-b446eedd73d3)
+
 [Visualise clicando aqui o site](https://gerador-de-qr-code-reactjs.netlify.app/)
 
 <div>
