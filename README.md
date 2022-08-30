@@ -1,3 +1,23 @@
+# Gerador-de-QRCode-com-ReactJS
+
+[Visualise clicando aqui o site](https://gerador-de-qr-code-reactjs.netlify.app/)
+<div>
+    <img align="left"  height="500" width="500" src="foto.png">
+</div>
+
+### Bibliotecas usadas
+``` nodejs
+yarn add react-qr-code
+```
+``` nodejs
+yarn add qrcode
+```
+``` nodejs
+npm install react-icons
+```
+
+
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
