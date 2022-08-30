@@ -1,8 +1,9 @@
 # Gerador-de-QRCode-com-ReactJS
 
 [Visualise clicando aqui o site](https://gerador-de-qr-code-reactjs.netlify.app/)
+
 <div>
-    <img align="left"  height="500" width="500" src="foto.png">
+    <img  height="500" width="500" src="foto.png">
 </div>
 
 ### Bibliotecas usadas
