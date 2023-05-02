@@ -1,8 +1,34 @@
-# Gerador-de-QRCode-com-ReactJS
+# Gerador de QR Code com ReactJS
 
 [![wakatime](https://wakatime.com/badge/user/268de5b9-4dbd-4873-9ede-a165e5745754/project/9ef7b6c4-80ab-4866-be52-b446eedd73d3.svg)](https://wakatime.com/badge/user/268de5b9-4dbd-4873-9ede-a165e5745754/project/9ef7b6c4-80ab-4866-be52-b446eedd73d3)
 
+
+
+Este projeto consiste em um gerador de QR Code desenvolvido com ReactJS, uma biblioteca JavaScript amplamente utilizada para a criação de interfaces de usuário.
+
+## Funcionalidades
+O gerador de QR Code permite que o usuário insira um texto ou URL, e gere um código QR correspondente. O código gerado pode ser salvo como um arquivo PNG, permitindo que o usuário o compartilhe ou o utilize como desejar.
+
+## Como usar
+Para utilizar o gerador de QR Code, basta clonar este repositório e executar o seguinte comando na pasta raiz:
+``` nodejs
+npm start
+```
+Isso iniciará o servidor local, e permitirá que você acesse o gerador de QR Code através de um navegador web, acessando o endereço http://localhost:3000.
+
+Para gerar um QR Code, basta inserir um texto ou URL na caixa de texto e clicar no botão "Gerar QR Code". O código gerado aparecerá na tela, e você poderá salvá-lo como um arquivo PNG clicando no botão "Salvar QR Code".
+
 [Visualise clicando aqui o site](https://gerador-de-qr-code-reactjs.netlify.app/)
+
+## Tecnologias utilizadas
+Este projeto foi desenvolvido utilizando as seguintes tecnologias:
+
+- ReactJS
+- JavaScript
+- HTML
+- CSS
+## Como contribuir
+Sinta-se à vontade para contribuir com este projeto! Para fazer isso, basta fazer um fork deste repositório, fazer as alterações desejadas e enviar um pull request.
 
 <div>
     <img  height="500" width="500" src="foto.png">
