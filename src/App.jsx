@@ -13,7 +13,7 @@ function App() {
   const [qrSize, setQrSize] = useState(200);
   const [fgColor, setFgColor] = useState("#000000");
   const [bgColor, setBgColor] = useState("#ffffff");
-  const [qrStyle, setQrStyle] = useState("squares"); // 'squares' ou 'dots'
+  const [qrStyle, setQrStyle] = useState("squares"); // "squares" ou "dots"
   const [theme, setTheme] = useState("light");
   const [logoImage, setLogoImage] = useState("");
 
@@ -36,6 +36,22 @@ function App() {
       .catch((err) => {
         console.error("Erro ao baixar a imagem:", err);
       });
+  };
+
+  // Função para copiar o QR Code (imagem) para a área de transferência
+  const handleCopyQRCode = async () => {
+    if (!qrRef.current) return;
+    try {
+      const dataUrl = await htmlToImage.toPng(qrRef.current, {
+        backgroundColor: "transparent",
+      });
+      const blob = await (await fetch(dataUrl)).blob();
+      const clipboardItem = new ClipboardItem({ "image/png": blob });
+      await navigator.clipboard.write([clipboardItem]);
+      alert("QR Code copiado para a área de transferência!");
+    } catch (err) {
+      console.error("Erro ao copiar QR Code:", err);
+    }
   };
 
   // Função para upload do logo
@@ -86,7 +102,6 @@ function App() {
             qrStyle={qrStyle}
             ecLevel="H"
             logoImage={logoImage}
-            // Logo dimensionado para 20% do tamanho total do QR Code
             logoWidth={qrSize * 0.2}
             logoHeight={qrSize * 0.2}
           />
@@ -185,9 +200,14 @@ function App() {
             </a>
           </div>
 
-          <button onClick={handleDownload} className="download-btn">
-            <AiOutlineDownload size={40} /> Baixar QR Code
-          </button>
+          <div className="action-buttons">
+            <button onClick={handleCopyQRCode} className="copy-btn">
+              <AiOutlineCopy size={20} /> Copiar QR Code
+            </button>
+            <button onClick={handleDownload} className="download-btn">
+              <AiOutlineDownload size={40} /> Baixar QR Code
+            </button>
+          </div>
         </div>
       </div>
     </div>

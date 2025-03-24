@@ -238,3 +238,11 @@ html {
   background: #45a049;
   transform: scale(1.05);
 }
+
+/* Botões de ação (Copiar QR Code e Baixar) */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
