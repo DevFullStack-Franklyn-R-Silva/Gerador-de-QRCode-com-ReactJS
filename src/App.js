@@ -1,45 +1,80 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import QRCode from "react-qr-code";
 import QRCodeLink from "qrcode";
-import {AiOutlineDownload} from "react-icons/ai"
+import { AiOutlineDownload } from "react-icons/ai";
 import "./App.css";
 
 function App() {
-    const [link, setLink] = useState("");
-    const [qrcodeLink, setQrcodeLink] = useState("");
+  const [link, setLink] = useState("");
+  const [qrcodeLink, setQrcodeLink] = useState("");
+  const [qrSize, setQrSize] = useState(200); // Tamanho inicial em pixels
+  const [error, setError] = useState(null);
 
-    function handleGenerate(link_url) {
-        QRCodeLink.toDataURL(link_url, {
-            width: 600,
-            margin: 3
-        }, function(error, url) {
-            setQrcodeLink(url);
+  useEffect(() => {
+    if (!link) {
+      setQrcodeLink("");
+      return;
+    }
+
+    const generateQRCode = async () => {
+      try {
+        const url = await QRCodeLink.toDataURL(link, {
+          width: qrSize,
+          margin: 3,
         });
+        setQrcodeLink(url);
+        setError(null);
+      } catch (err) {
+        console.error("Erro ao gerar o QR Code:", err);
+        setError("Erro ao gerar QR Code.");
+      }
     };
 
-    function handleQrcode(e)  {
-        setLink(e.target.value);
-        handleGenerate(e.target.value);
-    };
+    // Debounce para evitar chamadas excessivas enquanto o usuário digita
+    const debounceTimer = setTimeout(() => {
+      generateQRCode();
+    }, 300);
 
-    return (
-        <div className="container">
-            <QRCode value={link} />
+    return () => clearTimeout(debounceTimer);
+  }, [link, qrSize]);
 
-            <input
-                className="input"
-                placeholder="Digite seu link..."
-                value={link}
-                onChange={(e) => handleQrcode(e)}
-            />
-            {Object.keys(link).length > 0 && (
-                <a href={qrcodeLink} download={`qrcode.png`}>
-                    <AiOutlineDownload className="icone" size={40}/>
-                Baixar QrCode
-                </a>
-                )}
-        </div>
-    );
+  return (
+    <div className="container">
+      <div className="qrcode-preview">
+        <QRCode value={link || " "} size={qrSize} />
+      </div>
+
+      <input
+        className="input"
+        type="text"
+        placeholder="Digite seu link..."
+        value={link}
+        onChange={(e) => setLink(e.target.value)}
+      />
+
+      <div className="size-control">
+        <label htmlFor="qr-size">Tamanho do QR Code: {qrSize}px</label>
+        <input
+          id="qr-size"
+          type="range"
+          min="100"
+          max="600"
+          step="50"
+          value={qrSize}
+          onChange={(e) => setQrSize(Number(e.target.value))}
+        />
+      </div>
+
+      {error && <p className="error">{error}</p>}
+
+      {qrcodeLink && (
+        <a href={qrcodeLink} download="qrcode.png" className="download-btn">
+          <AiOutlineDownload size={40} />
+          Baixar QR Code
+        </a>
+      )}
+    </div>
+  );
 }
 
 export default App;
