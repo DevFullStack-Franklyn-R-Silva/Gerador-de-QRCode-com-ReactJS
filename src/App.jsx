@@ -17,36 +17,60 @@ function App() {
   const [theme, setTheme] = useState("light");
   const [logoImage, setLogoImage] = useState("");
 
+  // Ref para pegar o container do QR Code (usado para download)
   const qrRef = useRef(null);
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
   };
 
+  /**
+   * Baixa o container inteiro do QR Code usando html-to-image
+   * (caso você queira só o QR Code puro, pode trocar a lógica
+   * para usar o <canvas> como no handleCopyQRCode).
+   */
   const handleDownload = () => {
-    if (!qrRef.current) return;
-    htmlToImage
-      .toPng(qrRef.current)
-      .then((dataUrl) => {
-        const link = document.createElement("a");
-        link.download = "qrcode.png";
-        link.href = dataUrl;
-        link.click();
-      })
-      .catch((err) => {
-        console.error("Erro ao baixar a imagem:", err);
-      });
+    try {
+      // Pegamos o canvas gerado pelo QRCode
+      const canvas = qrRef.current.querySelector("canvas");
+      if (!canvas) {
+        alert("Nenhum canvas do QR Code foi encontrado!");
+        return;
+      }
+      // Gera o dataURL (imagem PNG) do canvas
+      const dataUrl = canvas.toDataURL("image/png");
+
+      // Cria um link temporário para baixar
+      const link = document.createElement("a");
+      link.download = "qrcode.png";
+      link.href = dataUrl;
+      link.click();
+    } catch (err) {
+      console.error("Erro ao baixar QR Code:", err);
+    }
   };
 
-  // Função para copiar o QR Code (imagem) para a área de transferência
+  /**
+   * Copia apenas o <canvas> gerado pelo QRCode,
+   * garantindo que fique sem fundo extra (apenas o QR Code).
+   */
   const handleCopyQRCode = async () => {
-    if (!qrRef.current) return;
     try {
-      const dataUrl = await htmlToImage.toPng(qrRef.current, {
-        backgroundColor: "transparent",
-      });
+      // Dentro do container (qrRef.current), pegamos o <canvas> do QR Code
+      const canvas = qrRef.current.querySelector("canvas");
+      if (!canvas) {
+        alert("Nenhum canvas do QR Code foi encontrado!");
+        return;
+      }
+
+      // Convertemos o canvas em DataURL (imagem PNG)
+      const dataUrl = canvas.toDataURL("image/png");
+
+      // Transformamos em Blob para criar o ClipboardItem
       const blob = await (await fetch(dataUrl)).blob();
       const clipboardItem = new ClipboardItem({ "image/png": blob });
+
+      // Copiamos para a área de transferência
       await navigator.clipboard.write([clipboardItem]);
       alert("QR Code copiado para a área de transferência!");
     } catch (err) {
@@ -92,7 +116,7 @@ function App() {
           </button>
         </div>
 
-        {/* Área do QR Code com animação e ref para exportação */}
+        {/* Área do QR Code (para visualização e download) */}
         <div className="qrcode-preview" ref={qrRef}>
           <QRCode
             value={text || " "}
