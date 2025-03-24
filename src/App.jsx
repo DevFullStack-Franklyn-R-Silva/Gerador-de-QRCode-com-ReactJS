@@ -12,12 +12,10 @@ function App() {
   const [text, setText] = useState("");
   const [qrSize, setQrSize] = useState(200);
   const [fgColor, setFgColor] = useState("#000000");
-  // Caso haja imagem de fundo, usaremos "transparent" para o QR Code
   const [bgColor, setBgColor] = useState("#ffffff");
   const [qrStyle, setQrStyle] = useState("squares"); // 'squares' ou 'dots'
   const [theme, setTheme] = useState("light");
   const [logoImage, setLogoImage] = useState("");
-  const [bgImage, setBgImage] = useState("");
 
   const qrRef = useRef(null);
 
@@ -52,18 +50,6 @@ function App() {
     }
   };
 
-  // Função para upload da imagem de fundo
-  const handleBgImageUpload = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setBgImage(reader.result);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
-
   // Copiar o texto para a área de transferência
   const handleCopyText = () => {
     if (text) {
@@ -90,28 +76,17 @@ function App() {
           </button>
         </div>
 
-        {/* Área do QR Code com fundo personalizado e dimensões proporcionais */}
-        {/* Área do QR Code com fundo personalizado e centralizado */}
-        <div
-          className="qrcode-preview"
-          ref={qrRef}
-          style={{
-            backgroundImage: bgImage ? `url(${bgImage})` : "none",
-            backgroundSize: "cover",
-            backgroundPosition: "center",
-            backgroundRepeat: "no-repeat",
-            width: `${qrSize}px`,
-            height: `${qrSize}px`,
-          }}
-        >
+        {/* Área do QR Code com animação e ref para exportação */}
+        <div className="qrcode-preview" ref={qrRef}>
           <QRCode
             value={text || " "}
-            size={qrSize * 0.9} // Pequeno ajuste para evitar cortes
+            size={qrSize}
             fgColor={fgColor}
-            bgColor={bgImage ? "transparent" : bgColor}
+            bgColor={bgColor}
             qrStyle={qrStyle}
             ecLevel="H"
             logoImage={logoImage}
+            // Logo dimensionado para 20% do tamanho total do QR Code
             logoWidth={qrSize * 0.2}
             logoHeight={qrSize * 0.2}
           />
@@ -148,17 +123,14 @@ function App() {
                 onChange={(e) => setFgColor(e.target.value)}
               />
             </div>
-            {/* Permite alterar a cor de fundo se nenhuma imagem for escolhida */}
-            {!bgImage && (
-              <div>
-                <label>Cor de Fundo:</label>
-                <input
-                  type="color"
-                  value={bgColor}
-                  onChange={(e) => setBgColor(e.target.value)}
-                />
-              </div>
-            )}
+            <div>
+              <label>Cor de Fundo:</label>
+              <input
+                type="color"
+                value={bgColor}
+                onChange={(e) => setBgColor(e.target.value)}
+              />
+            </div>
           </div>
 
           <div className="style-control">
@@ -180,16 +152,6 @@ function App() {
               type="file"
               accept="image/*"
               onChange={handleLogoUpload}
-            />
-          </div>
-
-          <div className="logo-control">
-            <label htmlFor="bg-upload">Insira um fundo:</label>
-            <input
-              id="bg-upload"
-              type="file"
-              accept="image/*"
-              onChange={handleBgImageUpload}
             />
           </div>
 
