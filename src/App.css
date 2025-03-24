@@ -127,7 +127,7 @@ html {
   margin-right: 8px;
 }
 
-/* Controle de estilo (módulos e olhos) */
+/* Controles de estilo (módulos, olhos, etc.) */
 .style-control {
   text-align: center;
   display: flex;
@@ -144,7 +144,9 @@ html {
   color: inherit;
 }
 
-.style-control select {
+.style-control select,
+.style-control input[type="range"],
+.style-control input[type="checkbox"] {
   padding: 8px 12px;
   border: 1px solid #ccc;
   border-radius: 8px;
@@ -152,19 +154,8 @@ html {
   background: #fff;
   color: #333;
   appearance: none;
-  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%23999' d='M0 2l5 5 5-5z'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 10px center;
-  background-size: 10px;
-  transition: border-color 0.3s ease, box-shadow 0.3s ease;
   width: 100%;
   max-width: 250px;
-}
-
-.style-control select:focus {
-  outline: none;
-  border-color: #4caf50;
-  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
 }
 
 /* Logo Control */

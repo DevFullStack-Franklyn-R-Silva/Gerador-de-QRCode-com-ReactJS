@@ -8,37 +8,39 @@ import {
 import "./App.css";
 
 function App() {
+  // Estados para customizações
   const [text, setText] = useState("");
   const [qrSize, setQrSize] = useState(200);
   const [fgColor, setFgColor] = useState("#000000");
   const [bgColor, setBgColor] = useState("#ffffff");
+  const [ecLevel, setEcLevel] = useState("H"); // "L", "M", "Q", "H"
   const [qrStyle, setQrStyle] = useState("squares"); // "squares" ou "dots"
   const [eyeStyle, setEyeStyle] = useState("square"); // "square" ou "circle"
-  const [theme, setTheme] = useState("light");
   const [logoImage, setLogoImage] = useState("");
+  const [logoOpacity, setLogoOpacity] = useState(1);
+  const [removeQrCodeBehindLogo, setRemoveQrCodeBehindLogo] = useState(false);
+  const [theme, setTheme] = useState("light");
 
-  // Ref para pegar o container do QR Code
+  // Ref para o container do QR Code (usado para copiar/baixar)
   const qrRef = useRef(null);
 
-  const toggleTheme = () => {
+  const toggleTheme = () =>
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
-  };
+
+  // Define o arredondamento dos olhos com base no estilo escolhido
+  const eyeRadius = eyeStyle === "circle" ? 10 : 0;
 
   /**
-   * Baixa SOMENTE o QR Code (canvas) em PNG
+   * Baixa SOMENTE o QR Code (canvas) como PNG
    */
   const handleDownload = () => {
     try {
-      // Pegamos o canvas gerado pelo QRCode
       const canvas = qrRef.current.querySelector("canvas");
       if (!canvas) {
         alert("Nenhum canvas do QR Code foi encontrado!");
         return;
       }
-      // Gera o dataURL (imagem PNG) do canvas
       const dataUrl = canvas.toDataURL("image/png");
-
-      // Cria um link temporário para baixar
       const link = document.createElement("a");
       link.download = "qrcode.png";
       link.href = dataUrl;
@@ -49,25 +51,18 @@ function App() {
   };
 
   /**
-   * Copia SOMENTE o QR Code (canvas) para a área de transferência.
+   * Copia SOMENTE o QR Code (canvas) para a área de transferência
    */
   const handleCopyQRCode = async () => {
     try {
-      // Pegamos o canvas gerado pelo QRCode
       const canvas = qrRef.current.querySelector("canvas");
       if (!canvas) {
         alert("Nenhum canvas do QR Code foi encontrado!");
         return;
       }
-
-      // Convertemos o canvas em DataURL (imagem PNG)
       const dataUrl = canvas.toDataURL("image/png");
-
-      // Transformamos em Blob para criar o ClipboardItem
       const blob = await (await fetch(dataUrl)).blob();
       const clipboardItem = new ClipboardItem({ "image/png": blob });
-
-      // Copiamos para a área de transferência
       await navigator.clipboard.write([clipboardItem]);
       alert("QR Code copiado para a área de transferência!");
     } catch (err) {
@@ -75,19 +70,17 @@ function App() {
     }
   };
 
-  // Função para upload do logo
+  // Upload do logo
   const handleLogoUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setLogoImage(reader.result);
-      };
+      reader.onloadend = () => setLogoImage(reader.result);
       reader.readAsDataURL(file);
     }
   };
 
-  // Copiar o texto para a área de transferência
+  // Copiar texto para a área de transferência
   const handleCopyText = () => {
     if (text) {
       navigator.clipboard
@@ -97,16 +90,11 @@ function App() {
     }
   };
 
-  // Gerando links para compartilhamento (encodificando o texto)
+  // Gera links de compartilhamento
   const shareTextEncoded = encodeURIComponent(text);
   const whatsappShare = `https://wa.me/?text=${shareTextEncoded}`;
   const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${shareTextEncoded}`;
   const twitterShare = `https://twitter.com/intent/tweet?text=${shareTextEncoded}`;
-
-  // Se eyeStyle = "circle", definimos um raio grande para arredondar os cantos dos olhos.
-  // Se eyeStyle = "square", usamos raio = 0 (cantos retos).
-  // Você pode ajustar esse valor (10, 12, 15) para deixar os olhos mais ou menos arredondados.
-  const eyeRadius = eyeStyle === "circle" ? 10 : 0;
 
   return (
     <div className={`container ${theme}`}>
@@ -118,23 +106,25 @@ function App() {
           </button>
         </div>
 
-        {/* Área do QR Code (para visualização) */}
+        {/* Visualização do QR Code */}
         <div className="qrcode-preview" ref={qrRef}>
           <QRCode
             value={text || " "}
             size={qrSize}
             fgColor={fgColor}
             bgColor={bgColor}
-            qrStyle={qrStyle} // "squares" ou "dots"
-            ecLevel="H"
+            ecLevel={ecLevel}
+            qrStyle={qrStyle}
             logoImage={logoImage}
             logoWidth={qrSize * 0.2}
             logoHeight={qrSize * 0.2}
-            // Propriedade que controla o arredondamento dos cantos dos olhos
+            logoOpacity={logoOpacity}
+            removeQrCodeBehindLogo={removeQrCodeBehindLogo}
             eyeRadius={eyeRadius}
           />
         </div>
 
+        {/* Controles para customização */}
         <div className="controls">
           <input
             className="input"
@@ -176,7 +166,7 @@ function App() {
             </div>
           </div>
 
-          {/* Dropdown de estilo dos módulos */}
+          {/* Estilo dos módulos */}
           <div className="style-control">
             <label htmlFor="qr-style">Estilo dos módulos:</label>
             <select
@@ -185,11 +175,11 @@ function App() {
               onChange={(e) => setQrStyle(e.target.value)}
             >
               <option value="squares">Quadrados</option>
-              <option value="dots">Pontos (arredondados)</option>
+              <option value="dots">Pontos</option>
             </select>
           </div>
 
-          {/* Dropdown de estilo dos olhos */}
+          {/* Estilo dos olhos */}
           <div className="style-control">
             <label htmlFor="eye-style">Estilo dos olhos:</label>
             <select
@@ -202,6 +192,49 @@ function App() {
             </select>
           </div>
 
+          {/* Nível de Correção de Erro */}
+          <div className="style-control">
+            <label htmlFor="ec-level">Nível de Correção de Erro:</label>
+            <select
+              id="ec-level"
+              value={ecLevel}
+              onChange={(e) => setEcLevel(e.target.value)}
+            >
+              <option value="L">L (Baixo)</option>
+              <option value="M">M (Médio)</option>
+              <option value="Q">Q (Quase)</option>
+              <option value="H">H (Alto)</option>
+            </select>
+          </div>
+
+          {/* Opacidade do Logo */}
+          <div className="style-control">
+            <label htmlFor="logo-opacity">Opacidade do Logo:</label>
+            <input
+              id="logo-opacity"
+              type="range"
+              min="0"
+              max="1"
+              step="0.1"
+              value={logoOpacity}
+              onChange={(e) => setLogoOpacity(Number(e.target.value))}
+            />
+          </div>
+
+          {/* Remover QR Code por trás do logo */}
+          <div className="style-control">
+            <label htmlFor="remove-behind-logo">
+              Remover QR Code por trás do logo:
+            </label>
+            <input
+              id="remove-behind-logo"
+              type="checkbox"
+              checked={removeQrCodeBehindLogo}
+              onChange={(e) => setRemoveQrCodeBehindLogo(e.target.checked)}
+            />
+          </div>
+
+          {/* Upload do logo */}
           <div className="logo-control">
             <label htmlFor="logo-upload">Insira um logo:</label>
             <input
@@ -212,6 +245,7 @@ function App() {
             />
           </div>
 
+          {/* Botões de compartilhamento */}
           <div className="share-controls">
             <button onClick={handleCopyText} className="copy-btn">
               <AiOutlineCopy size={20} /> Copiar Texto
@@ -242,6 +276,7 @@ function App() {
             </a>
           </div>
 
+          {/* Ações de copiar/baixar */}
           <div className="action-buttons">
             <button onClick={handleCopyQRCode} className="copy-btn">
               <AiOutlineCopy size={20} /> Copiar QR Code
