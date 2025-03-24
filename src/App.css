@@ -79,6 +79,10 @@ html {
   padding: 20px;
   background: #f8f8f8;
   border-radius: 12px;
+  width: 100%; /* Ocupa toda a largura do contêiner pai */
+  max-width: 600px; /* Evita que fique muito grande */
+  margin-left: auto;
+  margin-right: auto; /* Centraliza horizontalmente */
 }
 
 .container.dark .qrcode-preview {
