@@ -1,49 +1,124 @@
-.container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 20px;
-  min-height: 100vh;
-  background-color: #f0f2f5;
+/* Reset e fontes */
+body,
+html {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  height: 100%;
 }
 
-.qrcode-preview {
+/* Container centralizado */
+.container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.container.light {
+  background-color: #f0f2f5;
+  color: #333;
+}
+
+.container.dark {
+  background-color: #333;
+  color: #f0f2f5;
+}
+
+/* Card centralizado */
+.card {
   background: #fff;
   padding: 20px;
   border: 1px solid #ccc;
-  margin-bottom: 20px;
+  border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-width: 400px;
+  width: 100%;
 }
 
+.container.dark .card {
+  background: #444;
+  border: 1px solid #555;
+}
+
+/* Cabeçalho */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.theme-toggle {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 8px;
+  background-color: #ccc;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.theme-toggle:hover {
+  background-color: #aaa;
+}
+
+/* Pré-visualização do QR Code */
+.qrcode-preview {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+/* Controles */
+.controls {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Campo de entrada */
 .input {
-  width: 300px;
+  width: 100%;
   padding: 8px;
   border: 1px solid #b6b6b6;
   border-radius: 8px;
-  margin-bottom: 20px;
   font-size: 16px;
 }
 
+/* Controle de tamanho */
 .size-control {
-  margin-bottom: 20px;
   text-align: center;
-  width: 300px;
 }
 
 .size-control label {
   display: block;
   margin-bottom: 8px;
   font-size: 16px;
-  color: #333;
 }
 
-.size-control input[type="range"] {
-  width: 100%;
+/* Controles de cor */
+.color-controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
+.color-controls div {
+  display: flex;
+  align-items: center;
+}
+
+.color-controls label {
+  margin-right: 8px;
+}
+
+/* Botão de download */
 .download-btn {
   display: flex;
   align-items: center;
+  justify-content: center;
   text-decoration: none;
   font-size: 20px;
   color: #333;
@@ -56,10 +131,4 @@
 
 .download-btn:hover {
   background: #eaeaea;
-}
-
-.error {
-  color: red;
-  margin-bottom: 20px;
-  font-weight: bold;
 }
