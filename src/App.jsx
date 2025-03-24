@@ -13,10 +13,11 @@ function App() {
   const [fgColor, setFgColor] = useState("#000000");
   const [bgColor, setBgColor] = useState("#ffffff");
   const [qrStyle, setQrStyle] = useState("squares"); // "squares" ou "dots"
+  const [eyeStyle, setEyeStyle] = useState("square"); // "square" ou "circle"
   const [theme, setTheme] = useState("light");
   const [logoImage, setLogoImage] = useState("");
 
-  // Ref para pegar o container do QR Code (usado para download)
+  // Ref para pegar o container do QR Code
   const qrRef = useRef(null);
 
   const toggleTheme = () => {
@@ -24,9 +25,7 @@ function App() {
   };
 
   /**
-   * Baixa o container inteiro do QR Code usando html-to-image
-   * (caso você queira só o QR Code puro, pode trocar a lógica
-   * para usar o <canvas> como no handleCopyQRCode).
+   * Baixa SOMENTE o QR Code (canvas) em PNG
    */
   const handleDownload = () => {
     try {
@@ -50,12 +49,11 @@ function App() {
   };
 
   /**
-   * Copia apenas o <canvas> gerado pelo QRCode,
-   * garantindo que fique sem fundo extra (apenas o QR Code).
+   * Copia SOMENTE o QR Code (canvas) para a área de transferência.
    */
   const handleCopyQRCode = async () => {
     try {
-      // Dentro do container (qrRef.current), pegamos o <canvas> do QR Code
+      // Pegamos o canvas gerado pelo QRCode
       const canvas = qrRef.current.querySelector("canvas");
       if (!canvas) {
         alert("Nenhum canvas do QR Code foi encontrado!");
@@ -105,6 +103,11 @@ function App() {
   const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${shareTextEncoded}`;
   const twitterShare = `https://twitter.com/intent/tweet?text=${shareTextEncoded}`;
 
+  // Se eyeStyle = "circle", definimos um raio grande para arredondar os cantos dos olhos.
+  // Se eyeStyle = "square", usamos raio = 0 (cantos retos).
+  // Você pode ajustar esse valor (10, 12, 15) para deixar os olhos mais ou menos arredondados.
+  const eyeRadius = eyeStyle === "circle" ? 10 : 0;
+
   return (
     <div className={`container ${theme}`}>
       <div className="card">
@@ -115,18 +118,20 @@ function App() {
           </button>
         </div>
 
-        {/* Área do QR Code (para visualização e download) */}
+        {/* Área do QR Code (para visualização) */}
         <div className="qrcode-preview" ref={qrRef}>
           <QRCode
             value={text || " "}
             size={qrSize}
             fgColor={fgColor}
             bgColor={bgColor}
-            qrStyle={qrStyle}
+            qrStyle={qrStyle} // "squares" ou "dots"
             ecLevel="H"
             logoImage={logoImage}
             logoWidth={qrSize * 0.2}
             logoHeight={qrSize * 0.2}
+            // Propriedade que controla o arredondamento dos cantos dos olhos
+            eyeRadius={eyeRadius}
           />
         </div>
 
@@ -171,15 +176,29 @@ function App() {
             </div>
           </div>
 
+          {/* Dropdown de estilo dos módulos */}
           <div className="style-control">
-            <label htmlFor="qr-style">Estilo do QR Code:</label>
+            <label htmlFor="qr-style">Estilo dos módulos:</label>
             <select
               id="qr-style"
               value={qrStyle}
               onChange={(e) => setQrStyle(e.target.value)}
             >
-              <option value="squares">Quadrado</option>
-              <option value="dots">Ponto</option>
+              <option value="squares">Quadrados</option>
+              <option value="dots">Pontos (arredondados)</option>
+            </select>
+          </div>
+
+          {/* Dropdown de estilo dos olhos */}
+          <div className="style-control">
+            <label htmlFor="eye-style">Estilo dos olhos:</label>
+            <select
+              id="eye-style"
+              value={eyeStyle}
+              onChange={(e) => setEyeStyle(e.target.value)}
+            >
+              <option value="square">Quadrados</option>
+              <option value="circle">Redondos</option>
             </select>
           </div>
 
