@@ -33,7 +33,7 @@ html {
   border: 1px solid #ccc;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 400px;
+  max-width: 800px;
   width: 100%;
 }
 
@@ -48,6 +48,15 @@ html {
   justify-content: space-between;
   align-items: center;
   margin-bottom: 20px;
+}
+
+.header h1 {
+  /* Ajuste de tamanho responsivo para o título */
+  font-size: clamp(1.5rem, 5vw, 2.5rem);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .theme-toggle {
