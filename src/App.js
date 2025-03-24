@@ -86,9 +86,9 @@ function App() {
             qrStyle={qrStyle}
             ecLevel="H"
             logoImage={logoImage}
-            logoWidth={50}
-            logoHeight={50}
-            // Você pode adicionar classes para animações, por exemplo: className="fade-in"
+            // Logo dimensionado para 20% do tamanho total do QR Code
+            logoWidth={qrSize * 0.2}
+            logoHeight={qrSize * 0.2}
           />
         </div>
 
