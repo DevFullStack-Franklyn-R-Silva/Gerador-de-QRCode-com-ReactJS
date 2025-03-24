@@ -222,16 +222,15 @@ function App() {
           </div>
 
           {/* Remover QR Code por trás do logo */}
-          <div className="style-control">
-            <label htmlFor="remove-behind-logo">
-              Remover QR Code por trás do logo:
-            </label>
-            <input
-              id="remove-behind-logo"
-              type="checkbox"
-              checked={removeQrCodeBehindLogo}
-              onChange={(e) => setRemoveQrCodeBehindLogo(e.target.checked)}
-            />
+          <div className="toggle-control">
+            <button
+              className="toggle-btn"
+              onClick={() => setRemoveQrCodeBehindLogo((prev) => !prev)}
+            >
+              {removeQrCodeBehindLogo
+                ? "Sem fundo atrás do logo"
+                : "Com fundo atrás do logo"}
+            </button>
           </div>
 
           {/* Upload do logo */}

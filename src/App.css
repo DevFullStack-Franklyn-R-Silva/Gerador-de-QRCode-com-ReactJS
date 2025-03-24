@@ -237,3 +237,24 @@ html {
   flex-wrap: wrap;
   justify-content: center;
 }
+
+/* Estilo para o botão toggle */
+.toggle-control {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.toggle-btn {
+  padding: 8px 16px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background-color: #2196f3;
+  color: #fff;
+  transition: background 0.3s ease;
+}
+
+.toggle-btn:hover {
+  background-color: #1976d2;
+}
