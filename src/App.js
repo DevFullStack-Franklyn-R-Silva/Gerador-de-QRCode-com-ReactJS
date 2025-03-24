@@ -1,48 +1,36 @@
-import { useState, useEffect } from "react";
-import QRCode from "react-qr-code";
-import QRCodeLink from "qrcode";
+import { useState, useRef } from "react";
+import { QRCode } from "react-qrcode-logo";
 import { AiOutlineDownload } from "react-icons/ai";
+import * as htmlToImage from "html-to-image";
 import "./App.css";
 
 function App() {
-  const [link, setLink] = useState("");
-  const [qrcodeLink, setQrcodeLink] = useState("");
+  const [text, setText] = useState("");
   const [qrSize, setQrSize] = useState(200);
-  const [theme, setTheme] = useState("light");
   const [fgColor, setFgColor] = useState("#000000");
   const [bgColor, setBgColor] = useState("#ffffff");
+  const [qrStyle, setQrStyle] = useState("squares"); // 'squares' ou 'dots'
+  const [theme, setTheme] = useState("light");
 
-  useEffect(() => {
-    if (!link) {
-      setQrcodeLink("");
-      return;
-    }
-
-    const generateQRCode = async () => {
-      try {
-        const url = await QRCodeLink.toDataURL(link, {
-          width: qrSize,
-          margin: 3,
-          color: {
-            dark: fgColor,
-            light: bgColor,
-          },
-        });
-        setQrcodeLink(url);
-      } catch (err) {
-        console.error("Erro ao gerar o QR Code:", err);
-      }
-    };
-
-    const debounceTimer = setTimeout(() => {
-      generateQRCode();
-    }, 300);
-
-    return () => clearTimeout(debounceTimer);
-  }, [link, qrSize, fgColor, bgColor]);
+  const qrRef = useRef(null);
 
   const toggleTheme = () => {
     setTheme((prev) => (prev === "light" ? "dark" : "light"));
+  };
+
+  const handleDownload = () => {
+    if (qrRef.current === null) return;
+    htmlToImage
+      .toPng(qrRef.current)
+      .then((dataUrl) => {
+        const link = document.createElement("a");
+        link.download = "qrcode.png";
+        link.href = dataUrl;
+        link.click();
+      })
+      .catch((err) => {
+        console.error("Erro ao baixar a imagem:", err);
+      });
   };
 
   return (
@@ -55,21 +43,16 @@ function App() {
           </button>
         </div>
 
-        <div className="qrcode-preview">
-          {qrcodeLink ? (
-            <img
-              src={qrcodeLink}
-              alt="QR Code gerado"
-              style={{ width: qrSize, height: qrSize }}
-            />
-          ) : (
-            <QRCode
-              value={link || " "}
-              size={qrSize}
-              fgColor={fgColor}
-              bgColor={bgColor}
-            />
-          )}
+        {/* Área do QR Code com ref para exportação */}
+        <div className="qrcode-preview" ref={qrRef}>
+          <QRCode
+            value={text || " "}
+            size={qrSize}
+            fgColor={fgColor}
+            bgColor={bgColor}
+            qrStyle={qrStyle}
+            ecLevel="H"
+          />
         </div>
 
         <div className="controls">
@@ -77,8 +60,8 @@ function App() {
             className="input"
             type="text"
             placeholder="Digite qualquer texto ou link..."
-            value={link}
-            onChange={(e) => setLink(e.target.value)}
+            value={text}
+            onChange={(e) => setText(e.target.value)}
           />
 
           <div className="size-control">
@@ -113,12 +96,22 @@ function App() {
             </div>
           </div>
 
-          {qrcodeLink && (
-            <a href={qrcodeLink} download="qrcode.png" className="download-btn">
-              <AiOutlineDownload size={40} />
-              Baixar QR Code
-            </a>
-          )}
+          <div className="style-control">
+            <label htmlFor="qr-style">Estilo do QR Code:</label>
+            <select
+              id="qr-style"
+              value={qrStyle}
+              onChange={(e) => setQrStyle(e.target.value)}
+            >
+              <option value="squares">Quadrado</option>
+              <option value="dots">Ponto</option>
+            </select>
+          </div>
+
+          <button onClick={handleDownload} className="download-btn">
+            <AiOutlineDownload size={40} />
+            Baixar QR Code
+          </button>
         </div>
       </div>
     </div>

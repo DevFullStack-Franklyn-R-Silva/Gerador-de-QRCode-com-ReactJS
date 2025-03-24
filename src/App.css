@@ -69,6 +69,7 @@ html {
   justify-content: center;
   align-items: center;
   margin-bottom: 20px;
+  padding: 10px;
 }
 
 /* Controles */
@@ -114,11 +115,22 @@ html {
   margin-right: 8px;
 }
 
+/* Controle de estilo */
+.style-control {
+  text-align: center;
+}
+
+.style-control label {
+  margin-right: 8px;
+  font-size: 16px;
+}
+
 /* Botão de download */
 .download-btn {
   display: flex;
   align-items: center;
   justify-content: center;
+  gap: 8px;
   text-decoration: none;
   font-size: 20px;
   color: #333;
@@ -127,6 +139,9 @@ html {
   border-radius: 8px;
   background: #f7f7f7;
   transition: background 0.3s ease;
+  cursor: pointer;
+  outline: none;
+  border: none;
 }
 
 .download-btn:hover {
