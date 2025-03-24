@@ -3,7 +3,7 @@ body,
 html {
   margin: 0;
   padding: 0;
-  font-family: Arial, sans-serif;
+  font-family: "Roboto", Arial, sans-serif;
   height: 100%;
 }
 
@@ -17,29 +17,28 @@ html {
 }
 
 .container.light {
-  background-color: #f0f2f5;
+  background: linear-gradient(135deg, #f0f2f5, #ffffff);
   color: #333;
 }
 
 .container.dark {
-  background-color: #333;
+  background: #222;
   color: #f0f2f5;
 }
 
 /* Card centralizado */
 .card {
   background: #fff;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  max-width: 800px;
-  width: 100%;
+  padding: 30px;
+  border: none;
+  border-radius: 16px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  max-width: 100%;
+  width: 90%;
 }
 
 .container.dark .card {
-  background: #444;
-  border: 1px solid #555;
+  background: #333;
 }
 
 /* Cabeçalho */
@@ -47,11 +46,10 @@ html {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .header h1 {
-  /* Ajuste de tamanho responsivo para o título */
   font-size: clamp(1.5rem, 5vw, 2.5rem);
   margin: 0;
   white-space: nowrap;
@@ -60,16 +58,16 @@ html {
 }
 
 .theme-toggle {
-  padding: 8px 16px;
+  padding: 10px 20px;
   border: none;
-  border-radius: 8px;
-  background-color: #ccc;
+  border-radius: 12px;
+  background-color: #ddd;
   cursor: pointer;
   transition: background-color 0.3s ease;
 }
 
 .theme-toggle:hover {
-  background-color: #aaa;
+  background-color: #bbb;
 }
 
 /* Pré-visualização do QR Code */
@@ -77,8 +75,14 @@ html {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-bottom: 20px;
-  padding: 10px;
+  margin-bottom: 30px;
+  padding: 20px;
+  background: #f8f8f8;
+  border-radius: 12px;
+}
+
+.container.dark .qrcode-preview {
+  background: #444;
 }
 
 /* Controles */
@@ -90,9 +94,8 @@ html {
 
 /* Campo de entrada */
 .input {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #b6b6b6;
+  padding: 12px;
+  border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 16px;
 }
@@ -124,14 +127,44 @@ html {
   margin-right: 8px;
 }
 
-/* Controle de estilo */
+/* Controle de estilo aprimorado */
 .style-control {
   text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
 }
 
 .style-control label {
-  margin-right: 8px;
+  margin: 0;
   font-size: 16px;
+  font-weight: bold;
+  color: inherit;
+}
+
+.style-control select {
+  padding: 8px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+  background: #fff;
+  color: #333;
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=US-ASCII,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='10' viewBox='0 0 10 10'%3E%3Cpath fill='%23999' d='M0 2l5 5 5-5z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 10px center;
+  background-size: 10px;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  width: 100%;
+  max-width: 250px;
+}
+
+.style-control select:focus {
+  outline: none;
+  border-color: #4caf50;
+  box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
 }
 
 /* Botão de download */
@@ -142,17 +175,16 @@ html {
   gap: 8px;
   text-decoration: none;
   font-size: 20px;
-  color: #333;
-  padding: 10px 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background: #f7f7f7;
-  transition: background 0.3s ease;
-  cursor: pointer;
-  outline: none;
+  color: #fff;
+  padding: 8px 12px;
   border: none;
+  border-radius: 12px;
+  background: #4caf50;
+  transition: background 0.3s ease, transform 0.2s ease;
+  cursor: pointer;
 }
 
 .download-btn:hover {
-  background: #eaeaea;
+  background: #45a049;
+  transform: scale(1.05);
 }
