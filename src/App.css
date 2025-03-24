@@ -9,10 +9,10 @@ html {
 
 /* Container centralizado */
 .container {
+  padding: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
   transition: background-color 0.3s ease, color 0.3s ease;
 }
 
@@ -165,6 +165,56 @@ html {
   outline: none;
   border-color: #4caf50;
   box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+}
+
+/* Logo Control */
+.logo-control {
+  text-align: center;
+  margin-top: 10px;
+}
+
+.logo-control label {
+  font-size: 16px;
+  margin-right: 8px;
+  font-weight: bold;
+}
+
+.logo-control input[type="file"] {
+  padding: 8px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
+
+/* Share Controls */
+.share-controls {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 10px;
+}
+
+.copy-btn,
+.share-btn {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  padding: 8px 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  background: #2196f3;
+  color: #fff;
+  text-decoration: none;
+  transition: background 0.3s ease, transform 0.2s ease;
+}
+
+.copy-btn:hover,
+.share-btn:hover {
+  background: #1976d2;
+  transform: scale(1.05);
 }
 
 /* Botão de download */

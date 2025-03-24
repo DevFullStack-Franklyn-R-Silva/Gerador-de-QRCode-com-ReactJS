@@ -1,6 +1,10 @@
 import { useState, useRef } from "react";
 import { QRCode } from "react-qrcode-logo";
-import { AiOutlineDownload } from "react-icons/ai";
+import {
+  AiOutlineDownload,
+  AiOutlineCopy,
+  AiOutlineShareAlt,
+} from "react-icons/ai";
 import * as htmlToImage from "html-to-image";
 import "./App.css";
 
@@ -11,6 +15,7 @@ function App() {
   const [bgColor, setBgColor] = useState("#ffffff");
   const [qrStyle, setQrStyle] = useState("squares"); // 'squares' ou 'dots'
   const [theme, setTheme] = useState("light");
+  const [logoImage, setLogoImage] = useState("");
 
   const qrRef = useRef(null);
 
@@ -19,7 +24,7 @@ function App() {
   };
 
   const handleDownload = () => {
-    if (qrRef.current === null) return;
+    if (!qrRef.current) return;
     htmlToImage
       .toPng(qrRef.current)
       .then((dataUrl) => {
@@ -33,6 +38,34 @@ function App() {
       });
   };
 
+  // Função para upload do logo
+  const handleLogoUpload = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setLogoImage(reader.result);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Copiar o texto para a área de transferência
+  const handleCopyText = () => {
+    if (text) {
+      navigator.clipboard
+        .writeText(text)
+        .then(() => alert("Texto copiado para a área de transferência!"))
+        .catch((err) => console.error("Erro ao copiar:", err));
+    }
+  };
+
+  // Gerando links para compartilhamento (encodificando o texto)
+  const shareTextEncoded = encodeURIComponent(text);
+  const whatsappShare = `https://wa.me/?text=${shareTextEncoded}`;
+  const facebookShare = `https://www.facebook.com/sharer/sharer.php?u=${shareTextEncoded}`;
+  const twitterShare = `https://twitter.com/intent/tweet?text=${shareTextEncoded}`;
+
   return (
     <div className={`container ${theme}`}>
       <div className="card">
@@ -43,7 +76,7 @@ function App() {
           </button>
         </div>
 
-        {/* Área do QR Code com ref para exportação */}
+        {/* Área do QR Code com animação e ref para exportação */}
         <div className="qrcode-preview" ref={qrRef}>
           <QRCode
             value={text || " "}
@@ -52,6 +85,10 @@ function App() {
             bgColor={bgColor}
             qrStyle={qrStyle}
             ecLevel="H"
+            logoImage={logoImage}
+            logoWidth={50}
+            logoHeight={50}
+            // Você pode adicionar classes para animações, por exemplo: className="fade-in"
           />
         </div>
 
@@ -108,9 +145,48 @@ function App() {
             </select>
           </div>
 
+          <div className="logo-control">
+            <label htmlFor="logo-upload">Insira um logo:</label>
+            <input
+              id="logo-upload"
+              type="file"
+              accept="image/*"
+              onChange={handleLogoUpload}
+            />
+          </div>
+
+          <div className="share-controls">
+            <button onClick={handleCopyText} className="copy-btn">
+              <AiOutlineCopy size={20} /> Copiar Texto
+            </button>
+            <a
+              href={whatsappShare}
+              target="_blank"
+              rel="noreferrer"
+              className="share-btn"
+            >
+              <AiOutlineShareAlt size={20} /> WhatsApp
+            </a>
+            <a
+              href={facebookShare}
+              target="_blank"
+              rel="noreferrer"
+              className="share-btn"
+            >
+              <AiOutlineShareAlt size={20} /> Facebook
+            </a>
+            <a
+              href={twitterShare}
+              target="_blank"
+              rel="noreferrer"
+              className="share-btn"
+            >
+              <AiOutlineShareAlt size={20} /> Twitter
+            </a>
+          </div>
+
           <button onClick={handleDownload} className="download-btn">
-            <AiOutlineDownload size={40} />
-            Baixar QR Code
+            <AiOutlineDownload size={40} /> Baixar QR Code
           </button>
         </div>
       </div>
