@@ -5,7 +5,6 @@ import {
   AiOutlineCopy,
   AiOutlineShareAlt,
 } from "react-icons/ai";
-import * as htmlToImage from "html-to-image";
 import "./App.css";
 
 function App() {
